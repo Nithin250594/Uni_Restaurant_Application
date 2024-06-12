@@ -34,7 +34,7 @@ const CafeNavBar = () => {
   const history = useHistory()
 
   const onClickLogout = () => {
-    Cookies.remove('jwtToken')
+    Cookies.remove('jwt_token')
     history.replace('/login')
   }
 
