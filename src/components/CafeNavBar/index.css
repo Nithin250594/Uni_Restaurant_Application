@@ -35,18 +35,36 @@
   }
 }
 
-.CartLogo {
+@media screen and (min-width: 768px) {
+  .my-orders-link {
+    text-decoration: none;
+  }
+}
+
+.cart-logo {
   height: 50px;
   width: 30px;
   color: #414241;
-  align-self: center;
 }
 
 @media screen and (min-width: 768px) {
-  .CartLogo {
-    height: 35px;
-    width: 25px;
+  .cart-logo {
+    height: 40px;
+    width: 30px;
   }
+}
+
+.cart-logo-Link {
+  text-decoration: none;
+}
+
+.cart-link {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .CartCount {
@@ -56,8 +74,11 @@
   background-color: #f27507;
   color: white;
   align-self: flex-start;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-left: -10px;
+  font-size: 16px;
 }
 
 @media screen and (min-width: 768px) {
@@ -67,4 +88,20 @@
     border-radius: 11px;
     text-align: center;
   }
+}
+
+.logout-button {
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Roboto';
+  border: 1px #f27507 solid;
+  border-radius: 3px;
+  color: #f27507;
+  background-color: white;
+  padding: 2px;
+  cursor: pointer;
+  margin-left: 25px;
+  width: 80px;
+  height: 30px;
+  align-self: center;
 }

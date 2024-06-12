@@ -1,16 +1,17 @@
 import {useState, useContext, useEffect} from 'react'
+import Cookies from 'js-cookie'
+import {useHistory, Link} from 'react-router-dom'
 import {FaShoppingCart} from 'react-icons/fa'
 
 import CartContext from '../../CartContext'
 import './index.css'
 
 const CafeNavBar = () => {
-  const {cartCounts} = useContext(CartContext)
-  const totalCount = Object.values(cartCounts).reduce(
-    (sum, count) => sum + count,
-    0,
-  )
+  const {cartList} = useContext(CartContext)
+
   const [restaurantName, setRestaurantName] = useState('')
+
+  const cartCount = cartList.length
 
   useEffect(() => {
     const fetchRestaurantLogo = async () => {
@@ -30,13 +31,38 @@ const CafeNavBar = () => {
     fetchRestaurantLogo()
   }, [])
 
+  const history = useHistory()
+
+  const onClickLogout = () => {
+    Cookies.remove('jwtToken')
+    history.replace('/login')
+  }
+
+  const onClickCartIcon = () => {
+    history.replace('/cart')
+  }
+
   return (
     <nav className="nav-bar">
-      <h1 className="nav-logo">{restaurantName}</h1>
+      <Link to="/" className="cart-logo-Link">
+        <h1 className="nav-logo">{restaurantName}</h1>
+      </Link>
       <div className="cart-container">
-        <p className="my-orders-text">My Orders</p>
-        <FaShoppingCart className="CartLogo" />
-        <div className="CartCount">{totalCount}</div>
+        <Link to="/cart" className="my-orders-link">
+          <p className="my-orders-text">My Orders</p>
+        </Link>
+        <button
+          type="button"
+          className="cart-link"
+          onClick={onClickCartIcon}
+          data-testid="cart"
+        >
+          <FaShoppingCart className="cart-logo" />
+          <div className="CartCount">{cartCount}</div>
+        </button>
+        <button type="button" className="logout-button" onClick={onClickLogout}>
+          Logout
+        </button>
       </div>
     </nav>
   )

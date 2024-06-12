@@ -1,4 +1,4 @@
-import {useContext} from 'react'
+import {useContext, useState} from 'react'
 import CartContext from '../../CartContext'
 import './index.css'
 
@@ -10,13 +10,33 @@ const logosStickers = {
 }
 
 const DishCard = ({dishItem}) => {
-  const {cartCounts, incrementCount, decrementCount} = useContext(CartContext)
-  const dishCount = cartCounts[dishItem.dishId] || 0
+  const [quantity, setQuantity] = useState(0)
+  const {
+    addCartItem,
+    decrementCartItemQuantity,
+    incrementCartItemQuantity,
+  } = useContext(CartContext)
+
   const isCustomizeAvailable =
     dishItem.addonCat.length > 0 ? 'Customizations available' : ''
 
   const isVegLogo =
     dishItem.dishType === 2 ? logosStickers.veg : logosStickers.nonveg
+  const incrementCount = () => {
+    setQuantity(prevQuantity => prevQuantity + 1)
+  }
+
+  const decrementCount = () => {
+    if (quantity > 0) {
+      setQuantity(prevQuantity => prevQuantity - 1)
+    }
+    decrementCartItemQuantity(dishItem.dishId)
+  }
+
+  const onClickAddCart = () => {
+    addCartItem(dishItem, quantity)
+    incrementCartItemQuantity(dishItem.dishId)
+  }
 
   return (
     <li className="dish-item" key={dishItem.dishId}>
@@ -28,28 +48,33 @@ const DishCard = ({dishItem}) => {
         </p>
         <p className="dish-description">{dishItem.dishDescription}</p>
         {dishItem.dishAvailability ? (
-          <div className="count-div">
-            <button
-              type="button"
-              className="count-button"
-              onClick={() => {
-                if (dishCount > 0) {
-                  decrementCount(dishItem.dishId)
-                }
-              }}
-            >
-              -
-            </button>
-            <p className="dish-count">{dishCount}</p>
-            <button
-              type="button"
-              className="count-button"
-              onClick={() => {
-                incrementCount(dishItem.dishId)
-              }}
-            >
-              +
-            </button>
+          <div className="add-to-cart-section">
+            <div className="count-div">
+              <button
+                type="button"
+                className="count-button"
+                onClick={decrementCount}
+              >
+                -
+              </button>
+              <p className="dish-count">{quantity}</p>
+              <button
+                type="button"
+                className="count-button"
+                onClick={incrementCount}
+              >
+                +
+              </button>
+            </div>
+            {quantity > 0 && (
+              <button
+                type="button"
+                className="add-to-cart-button"
+                onClick={onClickAddCart}
+              >
+                ADD TO CART
+              </button>
+            )}
           </div>
         ) : (
           <p className="dish-available-text"> Not available</p>
@@ -61,7 +86,7 @@ const DishCard = ({dishItem}) => {
       </div>
       <p className="calories">{dishItem.dishCalories} Calories</p>
       <img
-        src={dishItem.dishImg}
+        src={dishItem.dishImage}
         alt={dishItem.dishName}
         className="dish-img"
       />
